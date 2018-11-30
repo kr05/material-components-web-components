@@ -147,8 +147,10 @@ export class TextField extends BaseElement {
       ${this.renderStyle()}
       <div class="mdc-text-field mdc-text-field--upgraded ${classMap(classes)}">
         ${!this.fullWidth && this.icon ? html`<i class="material-icons mdc-text-field__icon" tabindex="0">${this.icon}</i>` : ''}
+        <slot name="prefix" slot="prefix"></slot> 
         ${this._renderInput(this.value, this.required, this.type, this.placeHolder, this.label)}
         ${!this.fullWidth ? html`<label class="mdc-floating-label ${this.value ? 'mdc-floating-label--float-above' : ''}" for="text-field">${this.label}</label>` : ''}
+        <slot name="suffix" slot="suffix"></slot>
         ${!this.fullWidth && this.outlined ? html`<div class="mdc-notched-outline">
             <svg><path class="mdc-notched-outline__path"/></svg>
           </div>
@@ -161,7 +163,7 @@ export class TextField extends BaseElement {
   renderStyle() {
     return style;
   }
-  
+
   _renderInput(value, required, type, placeHolder, label) {
     return html`<input @input="${e => this._changeHandler(e)}" type="${type}" placeholder="${placeHolder}" ?required="${required}" class="mdc-text-field__input ${value ? 'mdc-text-field--upgraded' : ''}" id="text-field" .value="${value}" aria-label="${label}">`;
   }
@@ -175,7 +177,7 @@ export class TextField extends BaseElement {
 
     //Replaces previous method of hooking into the initialization method of the component-element class
     this.initFactories();
-    
+
     return {
       ...super.createAdapter(),
       registerTextFieldInteractionHandler: (evtType, handler) => this.mdcRoot.addEventListener(evtType, handler),
@@ -196,7 +198,7 @@ export class TextField extends BaseElement {
       floatLabel: (shouldFloat) => this.label_.float(shouldFloat),
       hasLabel: () => !!this.label_,
       getLabelWidth: () => this.label_.getWidth(),
-      
+
       activateLineRipple: () => {
         if (this.lineRipple_) {
           this.lineRipple_.activate();
@@ -233,7 +235,7 @@ export class TextField extends BaseElement {
     iconFactory = (el) => new MDCTextFieldIcon(el),
     labelFactory = (el) => new MDCFloatingLabel(el),
     outlineFactory = (el) => new MDCNotchedOutline(el)) {
-    
+
     const labelElement = this.labelSelector;
     if (labelElement) {
       this.label_ = labelFactory(labelElement);
